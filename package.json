@@ -1,34 +1,28 @@
 {
-  "name": "web3-react-native",
-  "version": "0.1.1",
-  "description": "⚛️ Web3 Native Modules for React Native.",
-  "main": "dist",
+  "name": "akroma-react-native",
+  "version": "0.0.1",
+  "description": "Akroma Native Modules for React Native.",
+  "main": "lib",
   "scripts": {
-    "build": "babel src --out-dir dist",
-    "prettify": "yarn prettier --write \"**/*.js\"",
-    "test": "jest"
+    "build": "tsc -p .",
+    "doc": "typedoc src/index.ts"
   },
   "private": false,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cawfree/web3-react-native.git",
-    "baseUrl": "https://github.com/cawfree/web3-react-native"
+    "url": "git+https://github.com/akroma/akroma-react-native.git",
+    "baseUrl": "https://github.com/akroma/akroma-react-native"
   },
   "keywords": [
     "react-native",
-    "ethereum",
-    "web3"
+    "akroma"
   ],
-  "author": {
-    "name": "Alex Thomas (@cawfree) <hello@cawfree.com>",
-    "email": "hello@cawfree.com"
-  },
   "license": "MIT",
   "licenseFilename": "LICENSE",
   "readmeFilename": "README.md",
-  "peerDependencies": {
-    "react": "^16.8.1",
-    "react-native": ">=0.60.0-rc.0 <1.0.x"
+  "author": {
+    "name": "Eric Polerecky (@detroitpro) <detroitpro@gmail.com>",
+    "email": "detroitpro@gmail.com"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -36,13 +30,22 @@
     "@babel/polyfill": "^7.8.7",
     "@babel/preset-env": "^7.9.5",
     "@babel/preset-react": "^7.9.4",
+    "@types/node": "^16.11.6",
+    "@types/react-native": "^0.66.1",
+    "@types/type-check": "^0.3.27",
     "husky": "^4.2.5",
     "jest": "^25.4.0",
+    "metro-react-native-babel-preset": "^0.66.2",
     "prettier": "^2.0.5",
-    "react": "^16.9.0",
-    "react-native": "^0.61.5"
+    "typedoc": "^0.22.7",
+    "typescript": "^4.4.4"
   },
   "dependencies": {
+    "react": "^17.0.2",
+    "react-native": "^0.66.1",
     "type-check": "^0.4.0"
+  },
+  "resolutions": {
+    "@types/react": "^17"
   }
 }

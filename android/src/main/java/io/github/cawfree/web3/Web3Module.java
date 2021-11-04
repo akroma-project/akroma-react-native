@@ -15,10 +15,7 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.Transfer;
-import org.web3j.tx.gas.ContractGasProvider;
-import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.utils.Convert;
-import org.web3j.utils.Numeric;
 
 import org.json.JSONObject;
 
@@ -28,10 +25,8 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.BufferedReader;
-import java.util.UUID;
 import java.util.Map;
 import java.util.HashMap;
 import java.math.BigDecimal;
@@ -48,16 +43,15 @@ public final class Web3Module extends ReactContextBaseJavaModule {
   public static final String TAG = "Web3Module";
 
   /** A simple utility method to print via ADB. */
-  private static final void debug(final String pString) {
+  private static void debug(final String pString) {
     Log.d(TAG, pString);
-    return;
   }
 
   /* Member Variables. */
-  private final Map<String, Credentials> mWallets;
+  private Map<String, Credentials> credentialsMap;
 
   // https://github.com/web3j/web3j/issues/915#issuecomment-483145928
-  private static final void setupBouncyCastle() {
+  private static void setupBouncyCastle() {
     final Provider p = Security.getProvider(BouncyCastleProvider.PROVIDER_NAME);
     if (p == null || p.getClass().equals(BouncyCastleProvider.class)) {
       return;
@@ -70,7 +64,7 @@ public final class Web3Module extends ReactContextBaseJavaModule {
   public Web3Module(final ReactApplicationContext pReactApplicationContext) {
     super(pReactApplicationContext);
     // Initialize Member Variables.
-    this.mWallets = new HashMap();
+    this.credentialsMap = new HashMap<>();
   }
 
   /** Module name when imported via NativeModules. **/
@@ -99,21 +93,34 @@ public final class Web3Module extends ReactContextBaseJavaModule {
     return;
   }
 
+
   @ReactMethod
-  public final void loadWallet(final ReadableMap pKeystore, final String pPassword, final Promise pPromise) {
+  public void testWallet(String keystore, String password, Promise promise) {
     try {
-      // XXX: Attempt to create the Wallet.
-      final String       addr = this.addWallet(pKeystore, pPassword);
-      final WritableMap args = Arguments.createMap();
-      // XXX: Propagate useful properties back to the caller.
-      args.putString("address", addr);
-      // XXX: Return the allocated wallet instance to the caller.
-      pPromise.resolve(args);
+      Credentials credentials = WalletUtils.loadJsonCredentials(password, keystore);
+      String address = credentials.getAddress();
+
+      WritableMap response = Arguments.createMap();
+      response.putString("address", address);
+      promise.resolve(response);
     }
-    catch (final Exception pException) {
-      pPromise.reject(pException);
+    catch (Exception e) {
+      promise.reject(e);
     }
     return;
+  }
+
+  @ReactMethod
+  public final void loadWallet(String keystore, String password, Promise promise) {
+    try {
+      String address = this.addWallet(keystore, password);
+      WritableMap args = Arguments.createMap();
+      args.putString("address", address);
+      promise.resolve(args);
+    }
+    catch (final Exception pException) {
+      promise.reject(pException);
+    }
   }
 
   @ReactMethod
@@ -150,9 +157,9 @@ public final class Web3Module extends ReactContextBaseJavaModule {
   }
 
   /** Reads the string contents of a File. **/
-  private static final String readFile(final File pFile) throws IOException {
+  private static String readFile(final File pFile) throws IOException {
     final StringBuilder sb = new StringBuilder();
-    final BufferedReader br = new BufferedReader(new FileReader(pFile));  
+    final BufferedReader br = new BufferedReader(new FileReader(pFile));
     String s;
     while ((s = br.readLine()) != null) {
       sb.append(s);
@@ -162,42 +169,17 @@ public final class Web3Module extends ReactContextBaseJavaModule {
     return sb.toString();
   }
 
-  /** Writes string contents to a designated File. **/
-  private static final void writeFile(final File pFile, final String pContent) throws IOException {
-    final FileWriter fw = new FileWriter(pFile, true);
-    fw.write(pContent);
-    // XXX: Ensure all of the bytes are written.
-    fw.flush();
-    fw.close();
-  }
-
-  /** Creates a temporary file reference. **/
-  private final File createTempFile() throws IOException {
-    return File.createTempFile(UUID.randomUUID().toString(), "json", this.getReactApplicationContext().getCacheDir());
-  }
 
   /** Adds a Wallet to the in-memory map. */
-  private final String addWallet(final ReadableMap pKeystore, final String pPassword) throws IOException, CipherException {
-    final File f = this.createTempFile(); 
-    // XXX:  Write the supplied data to a temporary file.
-    // TODO: Use loadJsonCredentials.
-    Web3Module.writeFile(f, new JSONObject(pKeystore.toHashMap()).toString());
-
-    // Load the Credentials.
-    final Credentials c = WalletUtils.loadCredentials(pPassword, f.getAbsolutePath());
-    // Delete the allocated file; it serves no purpose now.
-    f.delete();
-    // Fetch the Address of the Wallet.
-    final String addr = c.getAddress();
-    // Here we track the wallet for future reference. Any attempts to
-    // re-create the same wallet will resolve to the same place in memory.
-    this.getWallets().put(addr, c);
-    // Return the Wallet's address.
-    return addr;
+  private String addWallet(String keystore, String password) throws IOException, CipherException {
+    Credentials credentials = WalletUtils.loadJsonCredentials(password, keystore);
+    String address = credentials.getAddress();
+    this.getWallets().put(address, credentials);
+    return address;
   }
 
-  private final Map<String, Credentials> getWallets() {
-    return this.mWallets;
+  private Map<String, Credentials> getWallets() {
+    return this.credentialsMap;
   }
   
 }
