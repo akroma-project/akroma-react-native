@@ -1,27 +1,22 @@
-<div align="center">
-  <a href="https://github.com/cawfree/web3-react-native" alt="web3-react-native">
-    <img src="./public/logo.png" width="320" height="226" />
-  </a>
-</div>
+## Development
 
-# web3-react-native
-[**Web3**](https://web3js.readthedocs.io/en/v1.2.6/) Native Modules for [**React Native**](https://reactnative.dev/).
-
+```bash
+  yarn build
+  yalc push
+```
 ## 🚀 Getting Started
 
 Using [`npm`]():
 
 ```bash
-npm install --save web3-react-native
+npm install --save akroma-react-native
 ```
 
 Using [`yarn`]():
 
 ```bash
-yarn add web3-react-native
+yarn add akroma-react-native
 ```
-
-For versions less than [**React Native 0.60**](https://reactnative.dev/blog/2019/07/03/version-60), be sure to execute `react-native link` to make the native library dependencies visible to your compiled application.
 
 ### iOS
 After installing, append the following lines to your app's `ios/Podfile`, then execute `pod install`:
@@ -44,8 +39,3 @@ In your app's `AndroidManifest.xml`, [you need to](https://github.com/web3j/web3
 ```
 
 Perform a rebuild of your compiled application by calling `react-native run-android`.
-
-For usage details, please see the [**documentation**](./docs).
-
-## ✌️ License
-[**MIT**](./LICENSE)
