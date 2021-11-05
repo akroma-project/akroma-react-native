@@ -71,7 +71,7 @@ class RNWeb3: NSObject {
   @objc
   func sendFunds(
     _
-    wallet: NSDictionary,
+    address: NSString,
     url: NSString,
     password: NSString,
     toAddress: NSString,
@@ -81,7 +81,7 @@ class RNWeb3: NSObject {
     reject: RCTPromiseRejectBlock
   ) -> Void {
     do {
-      let address = (wallet["address"] as? String)!;
+      //let address = (wallet["address"] as? String)!;
       
       let ks = creds[address];
       let w  = web3(provider: Web3HttpProvider(URL(string: (url as String))!)!);

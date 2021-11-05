@@ -14,11 +14,11 @@ enum EthUnits {
 
 interface AkromaWallet {
   address: string;
-  sendFunds: (toAddress: string, amount: number, units: EthUnits) => {};
+  sendFunds: (toAddress: string, amount: number, units: EthUnits) => Promise<void>;
 }
 
 class AkromaRn {
-  constructor(private url: string = "https://boot2.akroma.org"){}
+  constructor(private url: string = "https://boot2.akroma.org") {}
 
   public sanitizeKeystore = (keystore: string): string => {
     if (typeCheck("Object", keystore)) {
@@ -26,18 +26,14 @@ class AkromaRn {
     } else if (typeCheck("String", keystore)) {
       return JSON.parse(keystore);
     }
-    throw new Error(
-      `Expected Object|String keystore, encountered ${keystore}.`
-    );
+    throw new Error(`Expected Object|String keystore, encountered ${keystore}.`);
   };
 
   public sanitizePassword = (password: string) => {
     if (typeCheck("String", password) && password.length > 0) {
       return password;
     }
-    throw new Error(
-      `Expected non-null non-empty String password, encountered ${typeof password}.`
-    );
+    throw new Error(`Expected non-null non-empty String password, encountered ${typeof password}.`);
   };
 
   public sanitizeUrl = (url: string | any[]) => {
@@ -54,10 +50,7 @@ class AkromaRn {
    * @param {string} password
    * @returns {AkaWallet} Wallet object with send method
    */
-  public async loadWallet(
-    keystore: string,
-    password: string
-  ): Promise<AkromaWallet> {
+  public async loadWallet(keystore: string, password: string): Promise<AkromaWallet> {
     this.sanitizeKeystore(keystore);
     this.sanitizePassword(password);
     const wallet: any = await RNWeb3.loadWallet(keystore, password);
@@ -66,17 +59,17 @@ class AkromaRn {
       address: wallet.address,
       sendFunds: async (toAddress: string, amount: number, units: EthUnits) => {
         console.debug("AKA: send-funds");
-        await RNWeb3.sendFunds(
-          wallet,
-          this.url,
-          password,
-          toAddress,
-          amount,
-          units
-        );
+        await RNWeb3.sendFunds(wallet, this.url, password, toAddress, amount, units);
       },
     };
     return akaWallet;
+  }
+
+  public async sendFunds(address: string, password: string, to: string, amount: number, units: EthUnits): Promise<string> {
+    console.debug("AKA: send-funds");
+    const transactionHash: string = await RNWeb3.sendFunds(address, this.url, password, to, amount.toString(), units);
+    console.debug("AKA: transaction-hash", transactionHash);
+    return transactionHash;
   }
 
   /**
@@ -90,10 +83,7 @@ class AkromaRn {
     return keystore;
   }
 
-  public async validateKeystoreCreds(
-    keystore: String,
-    password: String
-  ): Promise<Boolean> {
+  public async validateKeystoreCreds(keystore: String, password: String): Promise<Boolean> {
     try {
       const wallet: String = await RNWeb3.testWallet(keystore, password);
       console.debug("AKA: load-wallet: ", wallet);
@@ -105,4 +95,4 @@ class AkromaRn {
   }
 }
 
-export { AkromaRn };
+export { AkromaRn, EthUnits, AkromaWallet };
