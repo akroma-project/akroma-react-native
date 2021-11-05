@@ -1,3 +1,9 @@
+## Akroma React Native
+
+This package is used to communicate with the Akroma network. It started as a fork of https://github.com/cawfree/web3-react-native 
+The main Javascript was rewrote as Typescript and much of the Android module was updated. The Swift code has not yet been updated or tested.
+
+
 ## Development
 
 ```bash
