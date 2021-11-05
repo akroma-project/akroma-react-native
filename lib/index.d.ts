@@ -8,7 +8,7 @@ declare enum EthUnits {
 }
 interface AkromaWallet {
     address: string;
-    sendFunds: (toAddress: string, amount: number, units: EthUnits) => {};
+    sendFunds: (toAddress: string, amount: number, units: EthUnits) => Promise<void>;
 }
 declare class AkromaRn {
     private url;
@@ -24,6 +24,7 @@ declare class AkromaRn {
      * @returns {AkaWallet} Wallet object with send method
      */
     loadWallet(keystore: string, password: string): Promise<AkromaWallet>;
+    sendFunds(address: string, password: string, to: string, amount: number, units: EthUnits): Promise<string>;
     /**
      * Create a new keystore
      * @param {string} password
@@ -32,4 +33,4 @@ declare class AkromaRn {
     createKeystore(password: string): Promise<string>;
     validateKeystoreCreds(keystore: String, password: String): Promise<Boolean>;
 }
-export { AkromaRn };
+export { AkromaRn, EthUnits, AkromaWallet };

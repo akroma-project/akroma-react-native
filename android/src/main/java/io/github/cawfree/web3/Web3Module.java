@@ -48,7 +48,7 @@ public final class Web3Module extends ReactContextBaseJavaModule {
   }
 
   /* Member Variables. */
-  private Map<String, Credentials> credentialsMap;
+  private final Map<String, Credentials> credentialsMap;
 
   // https://github.com/web3j/web3j/issues/915#issuecomment-483145928
   private static void setupBouncyCastle() {
@@ -71,26 +71,25 @@ public final class Web3Module extends ReactContextBaseJavaModule {
   @Override public String getName() { return "Web3"; }
 
   @ReactMethod
-  public final void createKeystore(final String pPassword, final Promise pPromise) {
+  public final void createKeystore(String password, final Promise promise) {
     try {
       // Setup Bouncy Castle.
       Web3Module.setupBouncyCastle();
       // Fetch the cache directory.
       final File dir = this.getReactApplicationContext().getCacheDir();
       // Generate the new Wallet.
-      final String name = WalletUtils.generateNewWalletFile(pPassword, dir);
+      final String name = WalletUtils.generateNewWalletFile(password, dir);
       final File f = new File(dir.getAbsolutePath() + File.separator + name);
       // Parse the Keystore into a JSONObject.
       final JSONObject ks = new JSONObject(Web3Module.readFile(f));
       // Delete the temporary file.
       f.delete();
       // Propagate the keystore back to the caller.
-      pPromise.resolve(Arguments.fromBundle(new BundleJSONConverter().convertToBundle(ks)));
+      promise.resolve(Arguments.fromBundle(new BundleJSONConverter().convertToBundle(ks)));
     }
     catch (final Exception pException) {
-      pPromise.reject(pException);
+      promise.reject(pException);
     }
-    return;
   }
 
 
@@ -107,7 +106,6 @@ public final class Web3Module extends ReactContextBaseJavaModule {
     catch (Exception e) {
       promise.reject(e);
     }
-    return;
   }
 
   @ReactMethod
@@ -124,36 +122,25 @@ public final class Web3Module extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public final void sendFunds(final ReadableMap pWallet, final String pUrl, final String pPassword, final String pToAddress, final String pAmount, final String pUnits, final Promise pPromise) {
+  public final void sendFunds(String address, String url, String password, String to, String amount, String units, Promise promise) {
     try {
       // Fetch the Credentials.
-      final Credentials c = this.getWallets().get(pWallet.getString("address"));
-      if (c != null) {
-        // XXX: Allocate the HttpService we'll use for this transaction.
-        // TODO: Does this need to be destroyed? Is it worth caching?
-        final Web3j web3j = Web3j.build(new HttpService(pUrl));
-        final TransactionReceipt tr = Transfer.sendFunds(
-          web3j,
-          c,
-          pToAddress,
-          new BigDecimal(pAmount),
-          Convert.Unit.valueOf(pUnits)
-        )
-        .send();
+      final Credentials credentials = this.getWallets().get(address);
+      if (credentials != null) {
+        Web3j web3j = Web3j.build(new HttpService(url));
+        TransactionReceipt transactionReceipt = Transfer.sendFunds(web3j, credentials, to, new BigDecimal(amount), Convert.Unit.valueOf(units)).send();
         // Declare the callback parameters.
-        final WritableMap args = Arguments.createMap();
+        WritableMap args = Arguments.createMap();
         // Buffer the hash for the transaction.
-        args.putString("transactionHash", tr.getTransactionHash());
+        args.putString("transactionHash", transactionReceipt.getStatus());
         // Propagate the arguments to the caller.
-        pPromise.resolve(args);
-        return;
+        promise.resolve(args);
       }
       throw new IllegalStateException("No credentials found!");
     }
-    catch (final Exception pException) {
-      pPromise.reject(pException);
+    catch (final Exception e) {
+      promise.reject(e);
     }
-    return;
   }
 
   /** Reads the string contents of a File. **/
