@@ -43,7 +43,7 @@ class RNWeb3: NSObject {
       let jsonStr = String(data: data, encoding: .ascii);
       let ks : EthereumKeystoreV3 = EthereumKeystoreV3.init(jsonStr!)!;
       let address : String = ks.getAddress()!.address;
-      
+
       creds[address] = ks;
       resolve(["address": address]);
     } catch {
@@ -66,12 +66,12 @@ class RNWeb3: NSObject {
     } catch {
       reject("E_CREATEW", "\(error)", error);
     }
-  } 
-  
+  }
+
   @objc
   func sendFunds(
     _
-    address: NSString,
+    address: String,
     url: NSString,
     password: NSString,
     toAddress: NSString,
@@ -82,37 +82,37 @@ class RNWeb3: NSObject {
   ) -> Void {
     do {
       //let address = (wallet["address"] as? String)!;
-      
+
       let ks = creds[address];
       let w  = web3(provider: Web3HttpProvider(URL(string: (url as String))!)!);
       let keystoreManager = KeystoreManager([ks!]);
       w.addKeystoreManager(keystoreManager);
-      
+
       let walletAddress = EthereumAddress(address)!;
       let at = EthereumAddress((toAddress as String));
-      
+
       let contract = w.contract(Web3.Utils.coldWalletABI, at: at, abiVersion: 2);
       let value = try Web3.Utils.parseToBigUInt((amount as String), units: self.unitsFor(units as String));
-      
+
       var options = TransactionOptions.defaultOptions;
       options.value = value;
       options.from = walletAddress;
       options.gasPrice = .automatic;
       options.gasLimit = .automatic;
-        
+
       let tx = contract!.write("fallback", parameters: [AnyObject](), extraData: Data(), transactionOptions: options)!
-        
+
       let res = try tx.send(password: (password as String));
-        
+
       resolve(["transactionHash": res.hash]);
     } catch {
       reject("E_SENDFUNDS", "\(error)", error);
     }
   }
-    
+
   @objc
   static func requiresMainQueueSetup() -> Bool {
     return true
   }
-  
+
 }
