@@ -1,6 +1,6 @@
 ## Akroma React Native
 
-This package is used to communicate with the Akroma network. It started as a fork of https://github.com/cawfree/web3-react-native 
+This package is used to communicate with the Akroma network. It started as a fork of https://github.com/cawfree/web3-react-native
 The main Javascript was rewrote as Typescript and much of the Android module was updated. The Swift code has not yet been updated or tested.
 
 
@@ -22,6 +22,20 @@ Using [`yarn`]():
 
 ```bash
 yarn add akroma-react-native
+```
+### Install Locally
+Using [`npm`]():
+
+```bash
+npm install /akroma-react-native
+npx react-native link akroma-react-native
+```
+
+Using [`yarn`]():
+
+```bash
+yarn add file:/akroma-react-native
+npx react-native link akroma-react-native
 ```
 
 ### iOS
