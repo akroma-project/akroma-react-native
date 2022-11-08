@@ -30,20 +30,20 @@ class RNWeb3: NSObject {
     }
   }
 
-  @objc
+@objc
   func loadWallet(
     _
-    keystore: NSDictionary,
+    keystore: NSString,
     password: NSString,
     resolve: RCTPromiseResolveBlock,
     reject: RCTPromiseRejectBlock
   ) -> Void {
     do {
-      let data = try JSONSerialization.data(withJSONObject: keystore, options: []);
-      let jsonStr = String(data: data, encoding: .ascii);
+
+      let data: Data? = String(keystore).data(using: .utf8)
+      let jsonStr = String(data: data!, encoding: .ascii);
       let ks : EthereumKeystoreV3 = EthereumKeystoreV3.init(jsonStr!)!;
       let address : String = ks.getAddress()!.address;
-
       creds[address] = ks;
       resolve(["address": address]);
     } catch {

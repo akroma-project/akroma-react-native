@@ -9,7 +9,7 @@ RCT_EXTERN_METHOD(
 )
 
 RCT_EXTERN_METHOD(
-  loadWallet: (NSDictionary)keystore
+  loadWallet: (NSString)keystore
   password: (NSString)password
   resolve: (RCTPromiseResolveBlock)resolve
   reject: (RCTPromiseRejectBlock)reject
@@ -25,5 +25,5 @@ RCT_EXTERN_METHOD(
   resolve: (RCTPromiseResolveBlock)resolve
   reject: (RCTPromiseRejectBlock)reject
 )
-  
+
 @end
