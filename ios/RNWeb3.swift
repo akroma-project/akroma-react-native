@@ -83,12 +83,12 @@ class RNWeb3: NSObject {
     do {
       //let address = (wallet["address"] as? String)!;
 
-      let ks = creds[address];
+      let ks = creds[address as String];
       let w  = web3(provider: Web3HttpProvider(URL(string: (url as String))!)!);
       let keystoreManager = KeystoreManager([ks!]);
       w.addKeystoreManager(keystoreManager);
 
-      let walletAddress = EthereumAddress(address)!;
+      let walletAddress = EthereumAddress(address as String)!;
       let at = EthereumAddress((toAddress as String));
 
       let contract = w.contract(Web3.Utils.coldWalletABI, at: at, abiVersion: 2);
