@@ -1762,15 +1762,6 @@ ajv@^6.12.3:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-akroma-react-native@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/akroma-react-native/-/akroma-react-native-0.0.1.tgz#2ce337ab07798eab75e823c21200a140746c4f65"
-  integrity sha512-5dtn40s6fWW9wOemlcH7fDhje0Q04ih6c1iW1UpZ+PqQHLl7LrZKvE+FBWOPdcBl8anx4fmfY80v7ZBPBXYrOg==
-  dependencies:
-    react "^17.0.2"
-    react-native "^0.66.1"
-    type-check "^0.4.0"
-
 anser@^1.4.9:
   version "1.4.10"
   resolved "https://registry.yarnpkg.com/anser/-/anser-1.4.10.tgz#befa3eddf282684bd03b63dcda3927aef8c2e35b"
