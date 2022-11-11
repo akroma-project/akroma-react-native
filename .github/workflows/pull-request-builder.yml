@@ -9,6 +9,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Check if version has been updated
+        id: check
+        uses: EndBug/version-check@v2.1.1
+      - name : log
+        if: steps.check.outputs.changed == 'true'
+        run: echo "version has been updated"
+      - name: Log when unchanged
+        if: steps.check.outputs.changed == 'false'
+        run: 'echo "No version change :/"'
       - uses: actions/setup-node@v3
         with:
           node-version: '16.x'

@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Check if version has been updated
         id: check
-        uses: EndBug/version-check@v1
+        uses: EndBug/version-check@v2.1.1
       - uses: actions/setup-node@v3
         with:
           node-version: '16.x'
@@ -21,7 +21,7 @@ jobs:
       - run: npm install
       - run: npm ci
       - name: if version has been updated, publish to npm
-        if: steps.check.outputs.updated == 'true'
+        if: steps.check.outputs.changed == 'true'
         run: npm publish
         
       - name: Log when unchanged
