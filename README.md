@@ -59,3 +59,9 @@ In your app's `AndroidManifest.xml`, [you need to](https://github.com/web3j/web3
 ```
 
 Perform a rebuild of your compiled application by calling `react-native run-android`.
+
+### Publishing Package to NPM
+
+If you are a member of the npm orginization you can run:
+
+`npm publish --access public`
