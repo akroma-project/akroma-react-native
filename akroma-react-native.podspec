@@ -9,14 +9,14 @@ Pod::Spec.new do |s|
   s.description  = <<-DESC
   akroma-react-native
                    DESC
-  s.homepage     = "https://github.com/akroma/akroma-react-native"
+  s.homepage     = "https://github.com/akroma-project/akroma-react-native"
   # brief license entry:
   s.license      = "MIT"
   # optional - use expanded license entry instead:
   # s.license    = { :type => "MIT", :file => "LICENSE" }
   s.authors      = { "Eric Polerecky (@detroitpro) <detroitpro@gmail.com>" => "detroitpro@gmail.com" }
     s.platforms    = { :ios => "9.0" }
-  s.source       = { :git => "https://github.com/akroma/akroma-react-native.git", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/akroma-project/akroma-react-native.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,swift}"
   s.requires_arc = true
