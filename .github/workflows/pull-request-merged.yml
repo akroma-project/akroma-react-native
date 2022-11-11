@@ -12,8 +12,6 @@ jobs:
       - name: Check if version has been updated
         id: check
         uses: EndBug/version-check@v2.1.1
-      - name : log
-        run: echo ${{ toJson(steps.check.outputs) }}
       - uses: actions/setup-node@v3
         with:
           node-version: '16.x'
