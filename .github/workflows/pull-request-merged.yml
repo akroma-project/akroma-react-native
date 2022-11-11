@@ -21,11 +21,11 @@ jobs:
       - run: npm install
       - run: npm ci
       - name: if version has been updated, publish to npm
-        if: steps.check.outputs.changed == true
+        if: steps.check.outputs.changed == 'true'
         run: npm publish
         
       - name: Log when unchanged
-        if: steps.check.outputs.changed == false
+        if: steps.check.outputs.changed == 'false'
         run: 'echo "No version change :/"'
       - name: post to twitter
         uses: m1ner79/Github-Twittction@v1.0.1
