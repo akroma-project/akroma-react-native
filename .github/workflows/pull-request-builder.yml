@@ -13,10 +13,10 @@ jobs:
         id: check
         uses: EndBug/version-check@v2.1.1
       - name : log
-        if: steps.check.outputs.changed == true
+        if: steps.check.outputs.changed == 'true'
         run: echo "version has been updated"
       - name: Log when unchanged
-        if: steps.check.outputs.changed == false
+        if: steps.check.outputs.changed == 'false'
         run: 'echo "No version change :/"'
       - uses: actions/setup-node@v3
         with:
