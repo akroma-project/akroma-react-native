@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
   #       manually define these in the app's Podspec.
 
   s.dependency 'secp256k1.c', '0.1.2'
-  s.dependency 'web3swift', '2.2.1'
+  s.dependency 'web3swift', '3.0.6'
 
 end
 
