@@ -1,4 +1,4 @@
-#import "React/RCTBridgeModule.h"
+#import <React/RCTBridgeModule.h>
 
 @interface RCT_EXTERN_REMAP_MODULE(Web3, RNWeb3, NSObject)
 

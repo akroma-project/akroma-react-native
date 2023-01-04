@@ -44,7 +44,7 @@ After installing, append the following lines to your app's `ios/Podfile`, then e
 ```
 # web3-react-native
 pod 'secp256k1.c', '0.1.2', :modular_headers => true
-pod 'web3swift', '', :modular_headers => true
+pod 'web3swift', '3.0.6', :modular_headers => true
 ```
 
 > ⚠️ This is an ugly workaround for existing definition constraints in the  [Podspec](https://github.com/cawfree/web3-react-native/blob/63664f366c436aed73083b6b0a5cbf0b7374bfd3/web3-react-native.podspec#L26). ([View Issue](https://github.com/cawfree/web3-react-native/issues/1)).

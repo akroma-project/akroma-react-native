@@ -1,6 +1,6 @@
 {
   "name": "@akroma-project/akroma-react-native",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Akroma Native Modules for React Native.",
   "main": "lib",
   "scripts": {
